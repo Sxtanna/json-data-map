@@ -16,6 +16,11 @@ import java.util.function.Function;
  * Represents the information necessary to encode and decode a {@link JsonElement} to/from {@code T} at a certain path
  *
  * @param <T> The type this key is encoding and decoding
+ *
+ * @see JsonKey#of(Pxth, Class)
+ * @see JsonKey#of(Pxth, TypeToken)
+ * @see JsonKey#of(Pxth, Class, Function, Function)
+ * @see JsonKey#of(Pxth, TypeToken, Function, Function)
  */
 public interface JsonKey<T>
 {
