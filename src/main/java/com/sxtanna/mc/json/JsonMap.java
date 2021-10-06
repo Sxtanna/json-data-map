@@ -1,5 +1,6 @@
 package com.sxtanna.mc.json;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -12,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -697,6 +699,25 @@ public interface JsonMap
         }
 
         return null;
+    }
+
+
+    /**
+     * @return The new {@link JsonMap} using a {@link LinkedHashMap}
+     */
+    @Contract(" -> new")
+    static @NotNull JsonMap create()
+    {
+        return create(new LinkedHashMap<>());
+    }
+
+    /**
+     * @return The new {@link JsonMap} with the provided data {@link Map}
+     */
+    @Contract(value = "_ -> new", pure = true)
+    static @NotNull JsonMap create(@NotNull final Map<String, JsonElement> data)
+    {
+        return () -> data;
     }
 
 }
