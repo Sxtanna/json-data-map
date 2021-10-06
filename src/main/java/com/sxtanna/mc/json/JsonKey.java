@@ -137,7 +137,7 @@ public interface JsonKey<T>
             }
 
             @Override
-            public @Nullable T from(final @NotNull JsonElement json)
+            public @Nullable T from(@NotNull final JsonElement json)
             {
                 return from.apply(json);
             }
@@ -176,7 +176,7 @@ public interface JsonKey<T>
             }
 
             @Override
-            public @Nullable T from(final @NotNull JsonElement json)
+            public @Nullable T from(@NotNull final JsonElement json)
             {
                 return from.apply(json);
             }
