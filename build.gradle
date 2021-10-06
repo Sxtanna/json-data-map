@@ -62,7 +62,10 @@ signing {
 }
 
 javadoc {
-	if (JavaVersion.current().isJava9Compatible()) {
-		options.addBooleanOption('html5', true)
+	options {
+		addBooleanOption('html5', true)
+		
+		links "https://www.javadoc.io/doc/org.jetbrains/annotations/22.0.0"
+		links "https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.8"
 	}
 }
