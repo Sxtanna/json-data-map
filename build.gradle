@@ -1,0 +1,66 @@
+plugins {
+	id "java-library"
+	
+	id "signing"
+	id "maven-publish"
+}
+
+
+group "com.sxtanna.mc.json"
+version "0.1.0"
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compileOnly("org.jetbrains:annotations:22.0.0")
+	
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+}
+
+
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+test {
+	useJUnitPlatform()
+}
+
+configurations {
+	testImplementation.extendsFrom(compileOnly)
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+	
+	sourceCompatibility = JavaVersion.VERSION_16
+	targetCompatibility = JavaVersion.VERSION_16
+}
+
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			groupId = project.group
+			artifactId = project.name
+			version = project.version
+			
+			from components.java
+		}
+	}
+}
+
+signing {
+	sign publishing.publications.mavenJava
+}
+
+javadoc {
+	if (JavaVersion.current().isJava9Compatible()) {
+		options.addBooleanOption('html5', true)
+	}
+}
