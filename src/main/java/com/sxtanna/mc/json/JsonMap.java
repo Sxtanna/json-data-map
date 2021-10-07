@@ -1,5 +1,6 @@
 package com.sxtanna.mc.json;
 
+import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +28,7 @@ import java.util.function.Consumer;
  * @see JsonMap#create()
  * @see JsonMap#create(Map)
  */
+@AvailableSince("0.1.0")
 public interface JsonMap
 {
 
@@ -42,6 +44,7 @@ public interface JsonMap
     /**
      * @return The raw data stored in this {@link JsonMap}, should not be manually modified
      */
+    @AvailableSince("0.1.0")
     @NotNull Map<String, JsonElement> data();
 
 
@@ -51,6 +54,7 @@ public interface JsonMap
      * @return The {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
      * or {@link JsonNull#INSTANCE} if the path is empty or nothing is stored there
      */
+    @AvailableSince("0.1.0")
     default @NotNull JsonElement select(@NotNull @Unmodifiable final List<String> path)
     {
         return path.isEmpty() ? JsonNull.INSTANCE : find(path);
@@ -62,6 +66,7 @@ public interface JsonMap
      * @return The removed {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
      * or {@link JsonNull#INSTANCE} if the path is empty or nothing is stored there
      */
+    @AvailableSince("0.1.0")
     default @NotNull JsonElement remove(@NotNull @Unmodifiable final List<String> path)
     {
         if (path.isEmpty())
@@ -110,6 +115,7 @@ public interface JsonMap
      * @return The replaced {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
      * or {@link JsonNull#INSTANCE} if the path is empty or nothing was stored there
      */
+    @AvailableSince("0.1.0")
     default @NotNull JsonElement insert(@NotNull @Unmodifiable final List<String> path, @NotNull final JsonElement data)
     {
         if (path.isEmpty())
@@ -201,6 +207,7 @@ public interface JsonMap
     /**
      * @see JsonMap#select(List)
      */
+    @AvailableSince("0.1.0")
     default @NotNull JsonElement select(@NotNull final Pxth pxth)
     {
         return select(pxth.path());
@@ -209,6 +216,7 @@ public interface JsonMap
     /**
      * @see JsonMap#remove(List)
      */
+    @AvailableSince("0.1.0")
     default @NotNull JsonElement remove(@NotNull final Pxth pxth)
     {
         return remove(pxth.path());
@@ -217,6 +225,7 @@ public interface JsonMap
     /**
      * @see JsonMap#insert(List, JsonElement)
      */
+    @AvailableSince("0.1.0")
     default @NotNull JsonElement insert(@NotNull final Pxth pxth, @NotNull final JsonElement data)
     {
         return insert(pxth.path(), data);
@@ -235,6 +244,7 @@ public interface JsonMap
      * @see JsonMap#select(List)
      * @see JsonMap#select(Pxth)
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return evalQuery(path, type, false, gson, exceptionHandler);
@@ -245,6 +255,7 @@ public interface JsonMap
      *
      * @see JsonMap#select(List, Class, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return evalQuery(path, type.getType(), false, gson, exceptionHandler);
@@ -253,6 +264,7 @@ public interface JsonMap
     /**
      * @see JsonMap#select(List, Class, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, gson, exceptionHandler);
@@ -261,6 +273,7 @@ public interface JsonMap
     /**
      * @see JsonMap#select(List, TypeToken, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, gson, exceptionHandler);
@@ -271,6 +284,7 @@ public interface JsonMap
      *
      * @see JsonMap#select(Pxth, Class, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return jKey instanceof JsonKey.Direct<T> direct ? select(direct, exceptionHandler) : evalQuery(jKey.pxth().path(), jKey.type(), false, gson, exceptionHandler);
@@ -281,6 +295,7 @@ public interface JsonMap
      *
      * @see JsonMap#select(Pxth, Class, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey.Direct<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         try
@@ -300,6 +315,7 @@ public interface JsonMap
      * @see JsonMap#select(List, Class, Gson, Consumer)
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return select(path, type, gson, PRINT_STACK_TRACE);
@@ -309,6 +325,7 @@ public interface JsonMap
      * @see JsonMap#select(List, TypeToken, Gson, Consumer)
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return select(path, type, gson, PRINT_STACK_TRACE);
@@ -318,6 +335,7 @@ public interface JsonMap
      * @see JsonMap#select(Pxth, Class, Gson, Consumer)
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return select(pxth.path(), type, gson);
@@ -327,6 +345,7 @@ public interface JsonMap
      * @see JsonMap#select(Pxth, TypeToken, Gson, Consumer)
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return select(pxth.path(), type, gson);
@@ -336,6 +355,7 @@ public interface JsonMap
      * @see JsonMap#select(JsonKey, Gson, Consumer)
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson)
     {
         return select(jKey, gson, PRINT_STACK_TRACE);
@@ -345,6 +365,7 @@ public interface JsonMap
      * @see JsonMap#select(JsonKey.Direct, Consumer)
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey.Direct<T> jKey)
     {
         return select(jKey, PRINT_STACK_TRACE);
@@ -355,6 +376,7 @@ public interface JsonMap
      * @see JsonMap#select(List, Class, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(path, type, NORMAL_PRINT_GSON, exceptionHandler);
@@ -364,6 +386,7 @@ public interface JsonMap
      * @see JsonMap#select(List, TypeToken, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(path, type, NORMAL_PRINT_GSON, exceptionHandler);
@@ -373,6 +396,7 @@ public interface JsonMap
      * @see JsonMap#select(Pxth, Class, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, exceptionHandler);
@@ -382,6 +406,7 @@ public interface JsonMap
      * @see JsonMap#select(Pxth, TypeToken, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, exceptionHandler);
@@ -391,6 +416,7 @@ public interface JsonMap
      * @see JsonMap#select(JsonKey, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(jKey, NORMAL_PRINT_GSON, exceptionHandler);
@@ -402,6 +428,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
         return select(path, type, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
@@ -412,6 +439,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
         return select(path, type, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
@@ -422,6 +450,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type)
     {
         return select(pxth.path(), type);
@@ -432,6 +461,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type)
     {
         return select(pxth.path(), type);
@@ -442,6 +472,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#PRINT_STACK_TRACE
      */
+    @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey)
     {
         return select(jKey, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
@@ -458,6 +489,7 @@ public interface JsonMap
      * @see JsonMap#select(List)
      * @see JsonMap#select(Pxth)
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(evalQuery(path, type, false, gson, exceptionHandler));
@@ -468,6 +500,7 @@ public interface JsonMap
      *
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(evalQuery(path, type.getType(), false, gson, exceptionHandler));
@@ -476,6 +509,7 @@ public interface JsonMap
     /**
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, gson, exceptionHandler);
@@ -484,6 +518,7 @@ public interface JsonMap
     /**
      * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, gson, exceptionHandler);
@@ -494,6 +529,7 @@ public interface JsonMap
      *
      * @see JsonMap#select(JsonKey, Gson, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(select(jKey, gson, exceptionHandler));
@@ -504,6 +540,7 @@ public interface JsonMap
      *
      * @see JsonMap#select(JsonKey.Direct, Consumer)
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey.Direct<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(select(jKey, exceptionHandler));
@@ -514,6 +551,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return selectOpt(path, type, gson, IGNORED_EXCEPTION);
@@ -523,6 +561,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return selectOpt(path, type, gson, IGNORED_EXCEPTION);
@@ -532,6 +571,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(Pxth, Class, Gson, Consumer)
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return selectOpt(pxth.path(), type, gson);
@@ -541,6 +581,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(Pxth, TypeToken, Gson, Consumer)
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return selectOpt(pxth.path(), type, gson);
@@ -550,6 +591,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(JsonKey, Gson, Consumer)
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson)
     {
         return selectOpt(jKey, gson, IGNORED_EXCEPTION);
@@ -559,6 +601,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(JsonKey.Direct, Consumer)
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey.Direct<T> jKey)
     {
         return selectOpt(jKey, IGNORED_EXCEPTION);
@@ -569,6 +612,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, exceptionHandler);
@@ -578,6 +622,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, exceptionHandler);
@@ -587,6 +632,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(Pxth, Class, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, exceptionHandler);
@@ -596,6 +642,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(Pxth, TypeToken, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, exceptionHandler);
@@ -605,6 +652,7 @@ public interface JsonMap
      * @see JsonMap#selectOpt(JsonKey, Gson, Consumer)
      * @see JsonMap#NORMAL_PRINT_GSON
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(jKey, NORMAL_PRINT_GSON, exceptionHandler);
@@ -616,6 +664,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
@@ -626,6 +675,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
@@ -636,6 +686,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type)
     {
         return selectOpt(pxth.path(), type);
@@ -646,6 +697,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type)
     {
         return selectOpt(pxth.path(), type);
@@ -656,6 +708,7 @@ public interface JsonMap
      * @see JsonMap#NORMAL_PRINT_GSON
      * @see JsonMap#IGNORED_EXCEPTION
      */
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey)
     {
         return selectOpt(jKey, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
@@ -664,31 +717,37 @@ public interface JsonMap
 
 
     //<editor-fold desc="Remove Methods">
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return evalQuery(path, type, true, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return evalQuery(path, type.getType(), true, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(pxth.path(), type, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(pxth.path(), type, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return jKey instanceof JsonKey.Direct<T> direct ? remove(direct, exceptionHandler) : evalQuery(jKey.pxth().path(), jKey.type(), true, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey.Direct<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         try
@@ -704,197 +763,235 @@ public interface JsonMap
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return remove(path, type, gson, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return remove(path, type, gson, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return remove(pxth.path(), type, gson);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return remove(pxth.path(), type, gson);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson)
     {
         return remove(jKey, gson, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey.Direct<T> jKey)
     {
         return remove(jKey, PRINT_STACK_TRACE);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(pxth.path(), type, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(pxth.path(), type, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return remove(jKey, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
         return remove(path, type, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
         return remove(path, type, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final Class<T> type)
     {
         return remove(pxth.path(), type);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type)
     {
         return remove(pxth.path(), type);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey)
     {
         return remove(jKey, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(evalQuery(path, type, true, gson, exceptionHandler));
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(evalQuery(path, type.getType(), true, gson, exceptionHandler));
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(pxth.path(), type, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(pxth.path(), type, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(remove(jKey, gson, exceptionHandler));
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey.Direct<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(remove(jKey, exceptionHandler));
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return removeOpt(path, type, gson, IGNORED_EXCEPTION);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return removeOpt(path, type, gson, IGNORED_EXCEPTION);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return removeOpt(pxth.path(), type, gson);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return removeOpt(pxth.path(), type, gson);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson)
     {
         return removeOpt(jKey, gson, IGNORED_EXCEPTION);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey.Direct<T> jKey)
     {
         return removeOpt(jKey, IGNORED_EXCEPTION);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(pxth.path(), type, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(pxth.path(), type, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return removeOpt(jKey, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
         return removeOpt(path, type, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
         return removeOpt(path, type, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type)
     {
         return removeOpt(pxth.path(), type);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type)
     {
         return removeOpt(pxth.path(), type);
     }
 
+    @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey<T> jKey)
     {
         return removeOpt(jKey, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
@@ -903,11 +1000,13 @@ public interface JsonMap
 
 
     //<editor-fold desc="Insert Methods">
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final T data, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(path, data.getClass(), data, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         try
@@ -925,16 +1024,19 @@ public interface JsonMap
         }
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final T data, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(pxth.path(), data, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(pxth.path(), type, data, gson, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey<T> jKey, @NotNull final T data, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         if (jKey instanceof JsonKey.Direct<T> direct)
@@ -959,6 +1061,7 @@ public interface JsonMap
         }
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey.Direct<T> jKey, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         try
@@ -977,83 +1080,99 @@ public interface JsonMap
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final T data, @NotNull final Gson gson)
     {
         insert(path, data, gson, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Gson gson)
     {
         insert(path, type, data, gson, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final T data, @NotNull final Gson gson)
     {
         insert(pxth.path(), data, gson);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Gson gson)
     {
         insert(pxth.path(), type, data, gson);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey<T> jKey, @NotNull final T data, @NotNull final Gson gson)
     {
         insert(jKey, data, gson, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey.Direct<T> jKey, @NotNull final T data)
     {
         insert(jKey, data, PRINT_STACK_TRACE);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(path, data, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(path, type, data, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(pxth.path(), data, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(pxth.path(), type, data, exceptionHandler);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey<T> jKey, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         insert(jKey, data, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final T data)
     {
         insert(path, data, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<? extends T> type, @NotNull final T data)
     {
         insert(path, type, data, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final T data)
     {
         insert(pxth.path(), data);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final Pxth pxth, @NotNull final Class<? extends T> type, @NotNull final T data)
     {
         insert(pxth.path(), type, data);
     }
 
+    @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey<T> jKey, @NotNull final T data)
     {
         insert(jKey, data, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
@@ -1160,6 +1279,7 @@ public interface JsonMap
     /**
      * @return The new {@link JsonMap} using a {@link LinkedHashMap}
      */
+    @AvailableSince("0.1.0")
     @Contract(" -> new")
     static @NotNull JsonMap create()
     {
@@ -1169,6 +1289,7 @@ public interface JsonMap
     /**
      * @return The new {@link JsonMap} with the provided data {@link Map}
      */
+    @AvailableSince("0.1.0")
     @Contract(value = "_ -> new", pure = true)
     static @NotNull JsonMap create(@NotNull final Map<String, JsonElement> data)
     {
