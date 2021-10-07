@@ -21,6 +21,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * A simple (enough) interface designed for attachment to any object for storing any arbitrary json data
+ *
+ * @see JsonMap#create()
+ * @see JsonMap#create(Map)
+ */
 public interface JsonMap
 {
 
@@ -33,14 +39,29 @@ public interface JsonMap
     Consumer<Throwable> PRINT_STACK_TRACE = Throwable::printStackTrace;
 
 
+    /**
+     * @return The raw data stored in this {@link JsonMap}, should not be manually modified
+     */
     @NotNull Map<String, JsonElement> data();
 
 
+    /**
+     * Select the value stored at the provided path
+     *
+     * @return The {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
+     * or {@link JsonNull#INSTANCE} if the path is empty or nothing is stored there
+     */
     default @NotNull JsonElement select(@NotNull @Unmodifiable final List<String> path)
     {
         return path.isEmpty() ? JsonNull.INSTANCE : find(path);
     }
 
+    /**
+     * Remove the value stored at the provided path
+     *
+     * @return The removed {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
+     * or {@link JsonNull#INSTANCE} if the path is empty or nothing is stored there
+     */
     default @NotNull JsonElement remove(@NotNull @Unmodifiable final List<String> path)
     {
         if (path.isEmpty())
@@ -83,6 +104,12 @@ public interface JsonMap
         return prev != null ? prev : JsonNull.INSTANCE;
     }
 
+    /**
+     * Insert a value at the provided path
+     *
+     * @return The replaced {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
+     * or {@link JsonNull#INSTANCE} if the path is empty or nothing was stored there
+     */
     default @NotNull JsonElement insert(@NotNull @Unmodifiable final List<String> path, @NotNull final JsonElement data)
     {
         if (path.isEmpty())
@@ -171,16 +198,25 @@ public interface JsonMap
     }
 
 
+    /**
+     * @see JsonMap#select(List)
+     */
     default @NotNull JsonElement select(@NotNull final Pxth pxth)
     {
         return select(pxth.path());
     }
 
+    /**
+     * @see JsonMap#remove(List)
+     */
     default @NotNull JsonElement remove(@NotNull final Pxth pxth)
     {
         return remove(pxth.path());
     }
 
+    /**
+     * @see JsonMap#insert(List, JsonElement)
+     */
     default @NotNull JsonElement insert(@NotNull final Pxth pxth, @NotNull final JsonElement data)
     {
         return insert(pxth.path(), data);
@@ -188,31 +224,63 @@ public interface JsonMap
 
 
     //<editor-fold desc="Select Methods">
+
+    /**
+     * Select and decode the value stored at the provided path
+     *
+     * @param gson             The {@link Gson} instance to use in the decoding process
+     * @param exceptionHandler The handler for any caught exception during the decoding process
+     * @return The {@link T} decoded from the {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
+     * or null if the path is empty, nothing is stored there, or the decoding process fails
+     * @see JsonMap#select(List)
+     * @see JsonMap#select(Pxth)
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return evalQuery(path, type, false, gson, exceptionHandler);
     }
 
+    /**
+     * Select and decode the value stored at the provided path, using a {@link TypeToken}
+     *
+     * @see JsonMap#select(List, Class, Gson, Consumer)
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return evalQuery(path, type.getType(), false, gson, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#select(List, Class, Gson, Consumer)
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, gson, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#select(List, TypeToken, Gson, Consumer)
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, gson, exceptionHandler);
     }
 
+    /**
+     * Select and decode the value stored using the path and type from the provided {@link JsonKey}
+     *
+     * @see JsonMap#select(Pxth, Class, Gson, Consumer)
+     */
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return jKey instanceof JsonKey.Direct<T> direct ? select(direct, exceptionHandler) : evalQuery(jKey.pxth().path(), jKey.type(), false, gson, exceptionHandler);
     }
 
+    /**
+     * Select and decode the value stored using the path and type from the provided {@link JsonKey.Direct}
+     *
+     * @see JsonMap#select(Pxth, Class, Gson, Consumer)
+     */
     default <T> @Nullable T select(@NotNull final JsonKey.Direct<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         try
@@ -228,197 +296,366 @@ public interface JsonMap
     }
 
 
+    /**
+     * @see JsonMap#select(List, Class, Gson, Consumer)
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return select(path, type, gson, PRINT_STACK_TRACE);
     }
 
+    /**
+     * @see JsonMap#select(List, TypeToken, Gson, Consumer)
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return select(path, type, gson, PRINT_STACK_TRACE);
     }
 
+    /**
+     * @see JsonMap#select(Pxth, Class, Gson, Consumer)
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return select(pxth.path(), type, gson);
     }
 
+    /**
+     * @see JsonMap#select(Pxth, TypeToken, Gson, Consumer)
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return select(pxth.path(), type, gson);
     }
 
+    /**
+     * @see JsonMap#select(JsonKey, Gson, Consumer)
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson)
     {
         return select(jKey, gson, PRINT_STACK_TRACE);
     }
 
+    /**
+     * @see JsonMap#select(JsonKey.Direct, Consumer)
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final JsonKey.Direct<T> jKey)
     {
         return select(jKey, PRINT_STACK_TRACE);
     }
 
 
+    /**
+     * @see JsonMap#select(List, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#select(List, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#select(Pxth, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#select(Pxth, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(pxth.path(), type, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#select(JsonKey, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return select(jKey, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
 
+    /**
+     * @see JsonMap#select(List, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
         return select(path, type, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
+    /**
+     * @see JsonMap#select(List, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
         return select(path, type, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
+    /**
+     * @see JsonMap#select(Pxth, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final Class<T> type)
     {
         return select(pxth.path(), type);
     }
 
+    /**
+     * @see JsonMap#select(Pxth, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type)
     {
         return select(pxth.path(), type);
     }
 
+    /**
+     * @see JsonMap#select(JsonKey, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#PRINT_STACK_TRACE
+     */
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey)
     {
         return select(jKey, NORMAL_PRINT_GSON, PRINT_STACK_TRACE);
     }
 
 
+    /**
+     * Select and decode the value stored at the provided path
+     *
+     * @param gson             The {@link Gson} instance to use in the decoding process
+     * @param exceptionHandler The handler for any caught exception during the decoding process
+     * @return An {@link Optional} containing {@link T} decoded from the {@link JsonElement} stored in {@link JsonMap#data()} at the provided path,
+     * or {@link Optional#empty()} if the path is empty, nothing is stored there, or the decoding process fails
+     * @see JsonMap#select(List)
+     * @see JsonMap#select(Pxth)
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(evalQuery(path, type, false, gson, exceptionHandler));
     }
 
+    /**
+     * Select and decode the value stored at the provided path, using a {@link TypeToken}
+     *
+     * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(evalQuery(path, type.getType(), false, gson, exceptionHandler));
     }
 
+    /**
+     * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, gson, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, gson, exceptionHandler);
     }
 
+    /**
+     * Select and decode the value stored using the path and type from the provided {@link JsonKey}
+     *
+     * @see JsonMap#select(JsonKey, Gson, Consumer)
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(select(jKey, gson, exceptionHandler));
     }
 
+    /**
+     * Select and decode the value stored using the path and type from the provided {@link JsonKey.Direct}
+     *
+     * @see JsonMap#select(JsonKey.Direct, Consumer)
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey.Direct<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return Optional.ofNullable(select(jKey, exceptionHandler));
     }
 
 
+    /**
+     * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return selectOpt(path, type, gson, IGNORED_EXCEPTION);
     }
 
+    /**
+     * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return selectOpt(path, type, gson, IGNORED_EXCEPTION);
     }
 
+    /**
+     * @see JsonMap#selectOpt(Pxth, Class, Gson, Consumer)
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
         return selectOpt(pxth.path(), type, gson);
     }
 
+    /**
+     * @see JsonMap#selectOpt(Pxth, TypeToken, Gson, Consumer)
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Gson gson)
     {
         return selectOpt(pxth.path(), type, gson);
     }
 
+    /**
+     * @see JsonMap#selectOpt(JsonKey, Gson, Consumer)
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson)
     {
         return selectOpt(jKey, gson, IGNORED_EXCEPTION);
     }
 
+    /**
+     * @see JsonMap#selectOpt(JsonKey.Direct, Consumer)
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey.Direct<T> jKey)
     {
         return selectOpt(jKey, IGNORED_EXCEPTION);
     }
 
 
+    /**
+     * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#selectOpt(Pxth, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#selectOpt(Pxth, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(pxth.path(), type, exceptionHandler);
     }
 
+    /**
+     * @see JsonMap#selectOpt(JsonKey, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         return selectOpt(jKey, NORMAL_PRINT_GSON, exceptionHandler);
     }
 
 
+    /**
+     * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
     }
 
+    /**
+     * @see JsonMap#selectOpt(List, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
         return selectOpt(path, type, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
     }
 
+    /**
+     * @see JsonMap#selectOpt(Pxth, Class, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final Class<T> type)
     {
         return selectOpt(pxth.path(), type);
     }
 
+    /**
+     * @see JsonMap#selectOpt(Pxth, TypeToken, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final Pxth pxth, @NotNull final TypeToken<T> type)
     {
         return selectOpt(pxth.path(), type);
     }
 
+    /**
+     * @see JsonMap#selectOpt(JsonKey, Gson, Consumer)
+     * @see JsonMap#NORMAL_PRINT_GSON
+     * @see JsonMap#IGNORED_EXCEPTION
+     */
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey)
     {
         return selectOpt(jKey, NORMAL_PRINT_GSON, IGNORED_EXCEPTION);
