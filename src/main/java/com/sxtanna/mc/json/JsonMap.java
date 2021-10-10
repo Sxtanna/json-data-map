@@ -381,7 +381,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return select(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return select(path, type, defaultGson(), exceptionHandler);
     }
 
     /**
@@ -391,7 +391,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return select(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return select(path, type, defaultGson(), exceptionHandler);
     }
 
     /**
@@ -421,7 +421,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return select(jKey, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return select(jKey, defaultGson(), exceptionHandler);
     }
 
 
@@ -433,7 +433,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
-        return select(path, type, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        return select(path, type, defaultGson(), PRINT_STACK_TRACE);
     }
 
     /**
@@ -444,7 +444,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
-        return select(path, type, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        return select(path, type, defaultGson(), PRINT_STACK_TRACE);
     }
 
     /**
@@ -477,7 +477,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey)
     {
-        return select(jKey, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        return select(jKey, defaultGson(), PRINT_STACK_TRACE);
     }
 
 
@@ -617,7 +617,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return selectOpt(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return selectOpt(path, type, defaultGson(), exceptionHandler);
     }
 
     /**
@@ -627,7 +627,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return selectOpt(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return selectOpt(path, type, defaultGson(), exceptionHandler);
     }
 
     /**
@@ -657,7 +657,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return selectOpt(jKey, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return selectOpt(jKey, defaultGson(), exceptionHandler);
     }
 
 
@@ -669,7 +669,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
-        return selectOpt(path, type, FALLBACK_GSON_REF.get(), IGNORED_EXCEPTION);
+        return selectOpt(path, type, defaultGson(), IGNORED_EXCEPTION);
     }
 
     /**
@@ -680,7 +680,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
-        return selectOpt(path, type, FALLBACK_GSON_REF.get(), IGNORED_EXCEPTION);
+        return selectOpt(path, type, defaultGson(), IGNORED_EXCEPTION);
     }
 
     /**
@@ -713,7 +713,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull final JsonKey<T> jKey)
     {
-        return selectOpt(jKey, FALLBACK_GSON_REF.get(), IGNORED_EXCEPTION);
+        return selectOpt(jKey, defaultGson(), IGNORED_EXCEPTION);
     }
     //</editor-fold>
 
@@ -805,13 +805,13 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return remove(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return remove(path, type, defaultGson(), exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return remove(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return remove(path, type, defaultGson(), exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
@@ -829,20 +829,20 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return remove(jKey, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return remove(jKey, defaultGson(), exceptionHandler);
     }
 
 
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
-        return remove(path, type, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        return remove(path, type, defaultGson(), PRINT_STACK_TRACE);
     }
 
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
-        return remove(path, type, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        return remove(path, type, defaultGson(), PRINT_STACK_TRACE);
     }
 
     @AvailableSince("0.1.0")
@@ -860,7 +860,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey)
     {
-        return remove(jKey, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        return remove(jKey, defaultGson(), PRINT_STACK_TRACE);
     }
 
 
@@ -941,13 +941,13 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return removeOpt(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return removeOpt(path, type, defaultGson(), exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return removeOpt(path, type, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return removeOpt(path, type, defaultGson(), exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
@@ -965,20 +965,20 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey<T> jKey, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return removeOpt(jKey, FALLBACK_GSON_REF.get(), exceptionHandler);
+        return removeOpt(jKey, defaultGson(), exceptionHandler);
     }
 
 
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
-        return removeOpt(path, type, FALLBACK_GSON_REF.get(), IGNORED_EXCEPTION);
+        return removeOpt(path, type, defaultGson(), IGNORED_EXCEPTION);
     }
 
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type)
     {
-        return removeOpt(path, type, FALLBACK_GSON_REF.get(), IGNORED_EXCEPTION);
+        return removeOpt(path, type, defaultGson(), IGNORED_EXCEPTION);
     }
 
     @AvailableSince("0.1.0")
@@ -996,7 +996,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull final JsonKey<T> jKey)
     {
-        return removeOpt(jKey, FALLBACK_GSON_REF.get(), IGNORED_EXCEPTION);
+        return removeOpt(jKey, defaultGson(), IGNORED_EXCEPTION);
     }
     //</editor-fold>
 
@@ -1122,13 +1122,13 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        insert(path, data, FALLBACK_GSON_REF.get(), exceptionHandler);
+        insert(path, data, defaultGson(), exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<? extends T> type, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        insert(path, type, data, FALLBACK_GSON_REF.get(), exceptionHandler);
+        insert(path, type, data, defaultGson(), exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
@@ -1146,20 +1146,20 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey<T> jKey, @NotNull final T data, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        insert(jKey, data, FALLBACK_GSON_REF.get(), exceptionHandler);
+        insert(jKey, data, defaultGson(), exceptionHandler);
     }
 
 
     @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final T data)
     {
-        insert(path, data, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        insert(path, data, defaultGson(), PRINT_STACK_TRACE);
     }
 
     @AvailableSince("0.1.0")
     default <T> void insert(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<? extends T> type, @NotNull final T data)
     {
-        insert(path, type, data, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        insert(path, type, data, defaultGson(), PRINT_STACK_TRACE);
     }
 
     @AvailableSince("0.1.0")
@@ -1177,7 +1177,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> void insert(@NotNull final JsonKey<T> jKey, @NotNull final T data)
     {
-        insert(jKey, data, FALLBACK_GSON_REF.get(), PRINT_STACK_TRACE);
+        insert(jKey, data, defaultGson(), PRINT_STACK_TRACE);
     }
     //</editor-fold>
 
@@ -1223,6 +1223,12 @@ public interface JsonMap
         return () -> data;
     }
 
+
+    private static @NotNull Gson defaultGson()
+    {
+        final var gson = FALLBACK_GSON_REF.get();
+        return gson != null ? gson : GSON;
+    }
 
     private static @NotNull JsonElement find(@NotNull final Map<String, JsonElement> data, @NotNull @Unmodifiable final List<String> path)
     {
