@@ -1224,6 +1224,47 @@ public interface JsonMap
     }
 
 
+    static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key)
+    {
+        final var json = find(data, key.pxth().path());
+        if (json.isJsonNull())
+        {
+            return null;
+        }
+
+        try
+        {
+            return defaultGson().fromJson(json, key.type());
+        }
+        catch (final Throwable ex)
+        {
+            PRINT_STACK_TRACE.accept(ex);
+        }
+
+        return null;
+    }
+
+    static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key)
+    {
+        final var json = find(data, key.pxth().path());
+        if (json.isJsonNull())
+        {
+            return Optional.empty();
+        }
+
+        try
+        {
+            return Optional.ofNullable(defaultGson().fromJson(json, key.type()));
+        }
+        catch (final Throwable ex)
+        {
+            IGNORED_EXCEPTION.accept(ex);
+        }
+
+        return Optional.empty();
+    }
+
+
     private static @NotNull Gson defaultGson()
     {
         final var gson = FALLBACK_GSON_REF.get();
