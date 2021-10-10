@@ -57,7 +57,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default @NotNull JsonElement select(@NotNull @Unmodifiable final List<String> path)
     {
-        return path.isEmpty() ? JsonNull.INSTANCE : find(path);
+        return path.isEmpty() ? JsonNull.INSTANCE : find(data(), path);
     }
 
     /**
@@ -82,7 +82,7 @@ public interface JsonMap
         }
         else
         {
-            final var json = find(path.subList(0, path.size() - 1));
+            final var json = find(data(), path.subList(0, path.size() - 1));
 
             if (!json.isJsonArray() && !json.isJsonObject())
             {
@@ -131,7 +131,7 @@ public interface JsonMap
         }
         else
         {
-            final var json = find(path.subList(0, path.size() - 1));
+            final var json = find(data(), path.subList(0, path.size() - 1));
 
             if (json.isJsonObject() || json.isJsonArray())
             {
@@ -1180,81 +1180,6 @@ public interface JsonMap
     //</editor-fold>
 
 
-    private @NotNull JsonElement find(@NotNull @Unmodifiable final List<String> path)
-    {
-        if (path.isEmpty())
-        {
-            return JsonNull.INSTANCE;
-        }
-
-        var json = data().get(path.get(0));
-
-        if (json == null || path.size() == 1 || (!json.isJsonArray() && !json.isJsonObject()))
-        {
-            return json != null ? json : JsonNull.INSTANCE;
-        }
-
-        for (int i = 1; i < path.size(); i++)
-        {
-            if (json == null || (!json.isJsonArray() && !json.isJsonObject()))
-            {
-                return json != null ? json : JsonNull.INSTANCE;
-            }
-
-            final var next = path.get(i);
-
-            if (!json.isJsonArray())
-            {
-                json = json.getAsJsonObject().get(next);
-            }
-            else
-            {
-                try
-                {
-                    json = json.getAsJsonArray().get(Integer.parseInt(next));
-                }
-                catch (final NumberFormatException ignored)
-                {
-                    return JsonNull.INSTANCE;
-                }
-            }
-        }
-
-        return json != null ? json : JsonNull.INSTANCE;
-    }
-
-    private @NotNull JsonElement push(@NotNull final String name, @NotNull final JsonElement json, @NotNull final JsonElement data)
-    {
-        if (!json.isJsonArray() && !json.isJsonObject())
-        {
-            return JsonNull.INSTANCE;
-        }
-
-        final JsonElement prev;
-
-        if (json.isJsonObject())
-        {
-            final var jobj = json.getAsJsonObject();
-
-            prev = jobj.remove(name);
-
-            jobj.add(name, data);
-        }
-        else
-        {
-            try
-            {
-                prev = json.getAsJsonArray().set(Integer.parseInt(name), data);
-            }
-            catch (final NumberFormatException ignored)
-            {
-                return JsonNull.INSTANCE;
-            }
-        }
-
-        return prev != null ? prev : JsonNull.INSTANCE;
-    }
-
     private <T> @Nullable T evalQuery(@NotNull @Unmodifiable final List<String> path, @NotNull final Type type, final boolean remove, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         final var json = remove ? remove(path) : select(path);
@@ -1294,6 +1219,82 @@ public interface JsonMap
     static @NotNull JsonMap create(@NotNull final Map<String, JsonElement> data)
     {
         return () -> data;
+    }
+
+
+    private static @NotNull JsonElement find(@NotNull final Map<String, JsonElement> data, @NotNull @Unmodifiable final List<String> path)
+    {
+        if (path.isEmpty())
+        {
+            return JsonNull.INSTANCE;
+        }
+
+        var json = data.get(path.get(0));
+
+        if (json == null || path.size() == 1 || (!json.isJsonArray() && !json.isJsonObject()))
+        {
+            return json != null ? json : JsonNull.INSTANCE;
+        }
+
+        for (int i = 1; i < path.size(); i++)
+        {
+            if (json == null || (!json.isJsonArray() && !json.isJsonObject()))
+            {
+                return json != null ? json : JsonNull.INSTANCE;
+            }
+
+            final var next = path.get(i);
+
+            if (!json.isJsonArray())
+            {
+                json = json.getAsJsonObject().get(next);
+            }
+            else
+            {
+                try
+                {
+                    json = json.getAsJsonArray().get(Integer.parseInt(next));
+                }
+                catch (final NumberFormatException ignored)
+                {
+                    return JsonNull.INSTANCE;
+                }
+            }
+        }
+
+        return json != null ? json : JsonNull.INSTANCE;
+    }
+
+    private static @NotNull JsonElement push(@NotNull final String name, @NotNull final JsonElement json, @NotNull final JsonElement data)
+    {
+        if (!json.isJsonArray() && !json.isJsonObject())
+        {
+            return JsonNull.INSTANCE;
+        }
+
+        final JsonElement prev;
+
+        if (json.isJsonObject())
+        {
+            final var jobj = json.getAsJsonObject();
+
+            prev = jobj.remove(name);
+
+            jobj.add(name, data);
+        }
+        else
+        {
+            try
+            {
+                prev = json.getAsJsonArray().set(Integer.parseInt(name), data);
+            }
+            catch (final NumberFormatException ignored)
+            {
+                return JsonNull.INSTANCE;
+            }
+        }
+
+        return prev != null ? prev : JsonNull.INSTANCE;
     }
 
 }
