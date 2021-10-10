@@ -1224,7 +1224,7 @@ public interface JsonMap
     }
 
 
-    static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key)
+    static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         final var json = find(data, key.pxth().path());
         if (json.isJsonNull())
@@ -1234,17 +1234,47 @@ public interface JsonMap
 
         try
         {
-            return defaultGson().fromJson(json, key.type());
+            return gson.fromJson(json, key.type());
         }
         catch (final Throwable ex)
         {
-            PRINT_STACK_TRACE.accept(ex);
+            exceptionHandler.accept(ex);
         }
 
         return null;
     }
 
-    static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key)
+    static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Gson gson)
+    {
+        return extract(data, key, gson, PRINT_STACK_TRACE);
+    }
+
+    static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Consumer<Throwable> exceptionHandler)
+    {
+        if (!(key instanceof JsonKey.Direct<T> direct))
+        {
+            return extract(data, key, defaultGson(), exceptionHandler);
+        }
+
+        try
+        {
+            return direct.from(find(data, key.pxth().path()));
+        }
+        catch (final Throwable ex)
+        {
+            exceptionHandler.accept(ex);
+        }
+
+        return null;
+    }
+
+    static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key)
+    {
+        return extract(data, key, PRINT_STACK_TRACE);
+    }
+
+
+    static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         final var json = find(data, key.pxth().path());
         if (json.isJsonNull())
@@ -1254,14 +1284,43 @@ public interface JsonMap
 
         try
         {
-            return Optional.ofNullable(defaultGson().fromJson(json, key.type()));
+            return Optional.ofNullable(gson.fromJson(json, key.type()));
         }
         catch (final Throwable ex)
         {
-            IGNORED_EXCEPTION.accept(ex);
+            exceptionHandler.accept(ex);
         }
 
         return Optional.empty();
+    }
+
+    static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Gson gson)
+    {
+        return extractOpt(data, key, gson, IGNORED_EXCEPTION);
+    }
+
+    static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Consumer<Throwable> exceptionHandler)
+    {
+        if (!(key instanceof JsonKey.Direct<T> direct))
+        {
+            return extractOpt(data, key, defaultGson(), exceptionHandler);
+        }
+
+        try
+        {
+            return Optional.ofNullable(direct.from(find(data, key.pxth().path())));
+        }
+        catch (final Throwable ex)
+        {
+            exceptionHandler.accept(ex);
+        }
+
+        return Optional.empty();
+    }
+
+    static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key)
+    {
+        return extractOpt(data, key, IGNORED_EXCEPTION);
     }
 
 
