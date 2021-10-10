@@ -236,6 +236,10 @@ public interface JsonMap
 
     //<editor-fold desc="Select Methods">
 
+    //<editor-fold desc="Select Nullable">
+
+    //<editor-fold desc="Select">
+
     /**
      * Select and decode the value stored at the provided path
      *
@@ -311,7 +315,10 @@ public interface JsonMap
 
         return null;
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Select with Default Exception Handler">
 
     /**
      * @see JsonMap#select(List, Class, Gson, Consumer)
@@ -372,7 +379,10 @@ public interface JsonMap
     {
         return select(jKey, PRINT_STACK_TRACE);
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Select with Default Gson">
 
     /**
      * @see JsonMap#select(List, Class, Gson, Consumer)
@@ -423,7 +433,10 @@ public interface JsonMap
     {
         return select(jKey, defaultGson(), exceptionHandler);
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Select with Default Gson and Exception Handler">
 
     /**
      * @see JsonMap#select(List, Class, Gson, Consumer)
@@ -479,7 +492,14 @@ public interface JsonMap
     {
         return select(jKey, defaultGson(), PRINT_STACK_TRACE);
     }
+    //</editor-fold>
 
+    //</editor-fold>
+
+
+    //<editor-fold desc="Select Optional">
+
+    //<editor-fold desc="Select">
 
     /**
      * Select and decode the value stored at the provided path
@@ -547,7 +567,10 @@ public interface JsonMap
     {
         return Optional.ofNullable(select(jKey, exceptionHandler));
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Select with Default Exception Handler">
 
     /**
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
@@ -608,7 +631,10 @@ public interface JsonMap
     {
         return selectOpt(jKey, IGNORED_EXCEPTION);
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Select with Default Gson">
 
     /**
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
@@ -659,7 +685,10 @@ public interface JsonMap
     {
         return selectOpt(jKey, defaultGson(), exceptionHandler);
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Select with Default Gson and Exception Handler">
 
     /**
      * @see JsonMap#selectOpt(List, Class, Gson, Consumer)
@@ -717,8 +746,16 @@ public interface JsonMap
     }
     //</editor-fold>
 
+    //</editor-fold>
+
+    //</editor-fold>
+
 
     //<editor-fold desc="Remove Methods">
+
+    //<editor-fold desc="Remove Nullable">
+
+    //<editor-fold desc="Remove">
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
@@ -763,8 +800,10 @@ public interface JsonMap
 
         return null;
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove with Default Exception Handler">
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
@@ -800,8 +839,10 @@ public interface JsonMap
     {
         return remove(jKey, PRINT_STACK_TRACE);
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove with Default Gson">
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
@@ -831,8 +872,10 @@ public interface JsonMap
     {
         return remove(jKey, defaultGson(), exceptionHandler);
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove with Default Gson and Exception Handler">
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
@@ -862,8 +905,14 @@ public interface JsonMap
     {
         return remove(jKey, defaultGson(), PRINT_STACK_TRACE);
     }
+    //</editor-fold>
+
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove Optional">
+
+    //<editor-fold desc="Remove">
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
@@ -899,8 +948,10 @@ public interface JsonMap
     {
         return Optional.ofNullable(remove(jKey, exceptionHandler));
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove with Default Exception Handler">
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson)
     {
@@ -936,8 +987,10 @@ public interface JsonMap
     {
         return removeOpt(jKey, IGNORED_EXCEPTION);
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove with Default Gson">
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Consumer<Throwable> exceptionHandler)
     {
@@ -967,8 +1020,10 @@ public interface JsonMap
     {
         return removeOpt(jKey, defaultGson(), exceptionHandler);
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Remove with Default Gson and Exception Handler">
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type)
     {
@@ -998,6 +1053,10 @@ public interface JsonMap
     {
         return removeOpt(jKey, defaultGson(), IGNORED_EXCEPTION);
     }
+    //</editor-fold>
+
+    //</editor-fold>
+
     //</editor-fold>
 
 
@@ -1224,6 +1283,9 @@ public interface JsonMap
     }
 
 
+    //<editor-fold desc="Extract Methods">
+
+    //<editor-fold desc="Extract Nullable">
     static <T> @Nullable T extract(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         final var json = find(data, key.pxth().path());
@@ -1272,8 +1334,10 @@ public interface JsonMap
     {
         return extract(data, key, PRINT_STACK_TRACE);
     }
+    //</editor-fold>
 
 
+    //<editor-fold desc="Extract Optional">
     static <T> @NotNull Optional<T> extractOpt(@NotNull final Map<String, JsonElement> data, @NotNull final JsonKey<T> key, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         final var json = find(data, key.pxth().path());
@@ -1322,6 +1386,9 @@ public interface JsonMap
     {
         return extractOpt(data, key, IGNORED_EXCEPTION);
     }
+    //</editor-fold>
+
+    //</editor-fold>
 
 
     private static @NotNull Gson defaultGson()
