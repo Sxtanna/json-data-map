@@ -247,7 +247,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return evalQuery(path, type, false, gson, exceptionHandler);
+        return eval(path, type, false, gson, exceptionHandler);
     }
 
     /**
@@ -258,7 +258,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return evalQuery(path, type.getType(), false, gson, exceptionHandler);
+        return eval(path, type.getType(), false, gson, exceptionHandler);
     }
 
     /**
@@ -287,7 +287,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T select(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return jKey instanceof JsonKey.Direct<T> direct ? select(direct, exceptionHandler) : evalQuery(jKey.pxth().path(), jKey.type(), false, gson, exceptionHandler);
+        return jKey instanceof JsonKey.Direct<T> direct ? select(direct, exceptionHandler) : eval(jKey.pxth().path(), jKey.type(), false, gson, exceptionHandler);
     }
 
     /**
@@ -492,7 +492,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return Optional.ofNullable(evalQuery(path, type, false, gson, exceptionHandler));
+        return Optional.ofNullable(eval(path, type, false, gson, exceptionHandler));
     }
 
     /**
@@ -503,7 +503,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> selectOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return Optional.ofNullable(evalQuery(path, type.getType(), false, gson, exceptionHandler));
+        return Optional.ofNullable(eval(path, type.getType(), false, gson, exceptionHandler));
     }
 
     /**
@@ -720,13 +720,13 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return evalQuery(path, type, true, gson, exceptionHandler);
+        return eval(path, type, true, gson, exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return evalQuery(path, type.getType(), true, gson, exceptionHandler);
+        return eval(path, type.getType(), true, gson, exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
@@ -744,7 +744,7 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @Nullable T remove(@NotNull final JsonKey<T> jKey, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return jKey instanceof JsonKey.Direct<T> direct ? remove(direct, exceptionHandler) : evalQuery(jKey.pxth().path(), jKey.type(), true, gson, exceptionHandler);
+        return jKey instanceof JsonKey.Direct<T> direct ? remove(direct, exceptionHandler) : eval(jKey.pxth().path(), jKey.type(), true, gson, exceptionHandler);
     }
 
     @AvailableSince("0.1.0")
@@ -865,13 +865,13 @@ public interface JsonMap
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final Class<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return Optional.ofNullable(evalQuery(path, type, true, gson, exceptionHandler));
+        return Optional.ofNullable(eval(path, type, true, gson, exceptionHandler));
     }
 
     @AvailableSince("0.1.0")
     default <T> @NotNull Optional<T> removeOpt(@NotNull @Unmodifiable final List<String> path, @NotNull final TypeToken<T> type, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
-        return Optional.ofNullable(evalQuery(path, type.getType(), true, gson, exceptionHandler));
+        return Optional.ofNullable(eval(path, type.getType(), true, gson, exceptionHandler));
     }
 
     @AvailableSince("0.1.0")
@@ -1180,7 +1180,7 @@ public interface JsonMap
     //</editor-fold>
 
 
-    private <T> @Nullable T evalQuery(@NotNull @Unmodifiable final List<String> path, @NotNull final Type type, final boolean remove, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
+    private <T> @Nullable T eval(@NotNull @Unmodifiable final List<String> path, @NotNull final Type type, final boolean remove, @NotNull final Gson gson, @NotNull final Consumer<Throwable> exceptionHandler)
     {
         final var json = remove ? remove(path) : select(path);
         if (json.isJsonNull())
