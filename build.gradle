@@ -46,6 +46,17 @@ tasks.withType(JavaCompile) {
 
 
 publishing {
+	repositories {
+		maven {
+			url = uri("https://maven.pkg.github.com/Sxtanna/json-data-map")
+			
+			credentials {
+				username = project.hasProperty("githubPackagesUser") ? githubPackagesUser : System.getenv("GITHUB_ACTOR")
+				password = project.hasProperty("githubPackagesAuth") ? githubPackagesAuth : System.getenv("GITHUB_TOKEN")
+			}
+		}
+	}
+	
 	publications {
 		mavenJava(MavenPublication) {
 			groupId = project.group
